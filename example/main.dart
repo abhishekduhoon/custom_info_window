@@ -54,14 +54,31 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Text(
-                      "Info Window Widget",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.account_circle,
                             color: Colors.white,
+                            size: 30,
                           ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Text(
+                            "I am here",
+                            style:
+                                Theme.of(context).textTheme.headline6.copyWith(
+                                      color: Colors.white,
+                                    ),
+                          )
+                        ],
+                      ),
                     ),
                     width: double.infinity,
                     height: double.infinity,
@@ -70,7 +87,7 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
                 Triangle.isosceles(
                   edge: Edge.BOTTOM,
                   child: Container(
-                    color: Colors.red,
+                    color: Colors.blue,
                     width: 20.0,
                     height: 10.0,
                   ),
@@ -108,6 +125,8 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
           CustomInfoWindow(
             controller: _customInfoWindowController,
             height: 75,
+            width: 150,
+            offset: 50,
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+/// A widget based custom info window for google_maps_flutter package.
 library custom_info_window;
 
 import 'dart:io';
@@ -5,10 +6,18 @@ import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+/// Controller to add, update and controll the custom info window.
 class CustomInfoWindowController {
+  /// Add custom [Widget] and [Marker]'s [LatLng] to [CustomInfoWindow] and make it visible.
   Function(Widget, LatLng) addInfoWindow;
+
+  /// Notifies [CustomInfoWindow] to redraw as per change in position.
   VoidCallback onCameraMove;
+
+  /// Hides [CustomInfoWindow].
   VoidCallback hideInfoWindow;
+
+  /// Holds [GoogleMapController] for calculating [CustomInfoWindow] position.
   GoogleMapController googleMapController;
 
   void dispose() {
@@ -19,10 +28,18 @@ class CustomInfoWindowController {
   }
 }
 
+/// A statefull widget responsible to create widget based custom info window.
 class CustomInfoWindow extends StatefulWidget {
+  /// A [CustomInfoWindowController] to manipulate [CustomInfoWindow] state.
   final CustomInfoWindowController controller;
+
+  /// Offset to maintain space between [Marker] and [CustomInfoWindow].
   final double offset;
+
+  /// Height of [CustomInfoWindow].
   final double height;
+
+  /// Width of [CustomInfoWindow].
   final double width;
   const CustomInfoWindow({
     @required this.controller,
@@ -56,6 +73,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     widget.controller.hideInfoWindow = _hideInfoWindow;
   }
 
+  /// Calculate the position on [CustomInfoWindow] and redraw on screen.
   void _updateInfoWindow() async {
     if (_latLng == null ||
         _child == null ||
@@ -83,6 +101,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     });
   }
 
+  /// Assign the [Widget] and [Marker]'s [LatLng].
   void _addInfoWindow(Widget child, LatLng latLng) {
     assert(child != null);
     assert(latLng != null);
@@ -91,10 +110,12 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     _updateInfoWindow();
   }
 
+  /// Notifies camera movements on [GoogleMap].
   void _onCameraMove() {
     _updateInfoWindow();
   }
 
+  /// Disables [CustomInfoWindow] visibility.
   void _hideInfoWindow() {
     setState(() {
       _showNow = false;
