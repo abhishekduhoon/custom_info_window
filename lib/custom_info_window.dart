@@ -26,7 +26,7 @@ class CustomInfoWindow extends StatefulWidget {
   final double width;
   const CustomInfoWindow({
     @required this.controller,
-    this.offset = 100,
+    this.offset = 50,
     this.height = 50,
     this.width = 100,
   })  : assert(controller != null),
@@ -69,8 +69,8 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
         Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1.0;
     double left =
         (screenCoordinate.x.toDouble() / devicePixelRatio) - (widget.width / 2);
-    double top =
-        (screenCoordinate.y.toDouble() / devicePixelRatio) - widget.offset;
+    double top = (screenCoordinate.y.toDouble() / devicePixelRatio) -
+        (widget.offset + widget.height);
     setState(() {
       _showNow = true;
       if (left < 0 || top < 0) {
@@ -123,4 +123,3 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     );
   }
 }
-
