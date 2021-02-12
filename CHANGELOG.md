@@ -1,3 +1,7 @@
+## 0.0.4
+
+* onCameraMove bug.
+
 ## 0.0.3
 
 * Updated documentation.

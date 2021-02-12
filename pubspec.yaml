@@ -1,6 +1,6 @@
 name: custom_info_window
 description: A widget based custom info window for google_maps_flutter package.
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/abhishekduhoon/custom_info_window
 issue_tracker: https://github.com/abhishekduhoon/custom_info_window/issues
 

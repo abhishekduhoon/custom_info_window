@@ -41,6 +41,7 @@ class CustomInfoWindow extends StatefulWidget {
 
   /// Width of [CustomInfoWindow].
   final double width;
+
   const CustomInfoWindow({
     @required this.controller,
     this.offset = 50,
@@ -53,6 +54,7 @@ class CustomInfoWindow extends StatefulWidget {
         assert(height >= 0),
         assert(width != null),
         assert(width >= 0);
+
   @override
   _CustomInfoWindowState createState() => _CustomInfoWindowState();
 }
@@ -112,6 +114,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
 
   /// Notifies camera movements on [GoogleMap].
   void _onCameraMove() {
+    if (!_showNow) return;
     _updateInfoWindow();
   }
 
