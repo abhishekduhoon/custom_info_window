@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-/// Controller to add, update and controll the custom info window.
+/// Controller to add, update and control the custom info window.
 class CustomInfoWindowController {
   /// Add custom [Widget] and [Marker]'s [LatLng] to [CustomInfoWindow] and make it visible.
-  Function(Widget, LatLng) addInfoWindow;
+  Function(Widget, LatLng)? addInfoWindow;
 
   /// Notifies [CustomInfoWindow] to redraw as per change in position.
-  VoidCallback onCameraMove;
+  VoidCallback? onCameraMove;
 
   /// Hides [CustomInfoWindow].
-  VoidCallback hideInfoWindow;
+  VoidCallback? hideInfoWindow;
 
   /// Holds [GoogleMapController] for calculating [CustomInfoWindow] position.
-  GoogleMapController googleMapController;
+  GoogleMapController? googleMapController;
 
   void dispose() {
     addInfoWindow = null;
@@ -28,7 +28,7 @@ class CustomInfoWindowController {
   }
 }
 
-/// A statefull widget responsible to create widget based custom info window.
+/// A stateful widget responsible to create widget based custom info window.
 class CustomInfoWindow extends StatefulWidget {
   /// A [CustomInfoWindowController] to manipulate [CustomInfoWindow] state.
   final CustomInfoWindowController controller;
@@ -43,7 +43,7 @@ class CustomInfoWindow extends StatefulWidget {
   final double width;
 
   const CustomInfoWindow({
-    @required this.controller,
+    required this.controller,
     this.offset = 50,
     this.height = 50,
     this.width = 100,
@@ -64,8 +64,8 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
   bool _tempHidden = false;
   double _leftMargin = 0;
   double _topMargin = 0;
-  Widget _child;
-  LatLng _latLng;
+  Widget? _child;
+  LatLng? _latLng;
 
   @override
   void initState() {
@@ -83,8 +83,8 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
       return;
     }
     ScreenCoordinate screenCoordinate = await widget
-        .controller.googleMapController
-        .getScreenCoordinate(_latLng);
+        .controller.googleMapController!
+        .getScreenCoordinate(_latLng!);
     double devicePixelRatio =
         Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1.0;
     double left =
