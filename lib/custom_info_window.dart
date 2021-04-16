@@ -61,7 +61,6 @@ class CustomInfoWindow extends StatefulWidget {
 
 class _CustomInfoWindowState extends State<CustomInfoWindow> {
   bool _showNow = false;
-  bool _tempHidden = false;
   double _leftMargin = 0;
   double _topMargin = 0;
   Widget? _child;
@@ -93,13 +92,8 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
         (widget.offset + widget.height);
     setState(() {
       _showNow = true;
-      if (left < 0 || top < 0) {
-        _tempHidden = true;
-      } else {
-        _tempHidden = false;
-        _leftMargin = left;
-        _topMargin = top;
-      }
+      _leftMargin = left;
+      _topMargin = top;
     });
   }
 
@@ -132,7 +126,6 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
       top: _topMargin,
       child: Visibility(
         visible: (_showNow == false ||
-                _tempHidden == true ||
                 (_leftMargin == 0 && _topMargin == 0) ||
                 _child == null ||
                 _latLng == null)
