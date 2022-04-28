@@ -17,6 +17,9 @@ class CustomInfoWindowController {
   /// Hides [CustomInfoWindow].
   VoidCallback? hideInfoWindow;
 
+  /// Shows [CustomInfoWindow].
+  VoidCallback? showInfoWindow;
+
   /// Holds [GoogleMapController] for calculating [CustomInfoWindow] position.
   GoogleMapController? googleMapController;
 
@@ -24,6 +27,7 @@ class CustomInfoWindowController {
     addInfoWindow = null;
     onCameraMove = null;
     hideInfoWindow = null;
+    showInfoWindow = null;
     googleMapController = null;
   }
 }
@@ -72,6 +76,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     widget.controller.addInfoWindow = _addInfoWindow;
     widget.controller.onCameraMove = _onCameraMove;
     widget.controller.hideInfoWindow = _hideInfoWindow;
+    widget.controller.showInfoWindow = _showInfoWindow;
   }
 
   /// Calculate the position on [CustomInfoWindow] and redraw on screen.
@@ -117,6 +122,11 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     setState(() {
       _showNow = false;
     });
+  }
+
+  /// Enables [CustomInfoWindow] visibility.
+  void _showInfoWindow() {
+    _updateInfoWindow();
   }
 
   @override
