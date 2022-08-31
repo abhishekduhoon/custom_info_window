@@ -93,7 +93,7 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     setState(() {
       _showNow = true;
       _leftMargin = left;
-      _topMargin = top;
+      _topMargin = top + (top * 0.70);
     });
   }
 
