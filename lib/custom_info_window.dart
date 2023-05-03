@@ -1,7 +1,7 @@
 /// A widget based custom info window for google_maps_flutter package.
 library custom_info_window;
 
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -46,10 +46,7 @@ class CustomInfoWindow extends StatefulWidget {
   /// Width of [CustomInfoWindow].
   final double width;
 
-  final Function(double top, double left, double width, double height) onChange;
-
-  const CustomInfoWindow(
-    this.onChange, {
+  const CustomInfoWindow({
     required this.controller,
     this.offset = 50,
     this.height = 50,
@@ -103,7 +100,6 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
       _leftMargin = left;
       _topMargin = top;
     });
-    widget.onChange.call(top, left, widget.width, widget.height);
   }
 
   /// Assign the [Widget] and [Marker]'s [LatLng].

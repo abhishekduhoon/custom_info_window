@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_maps_flutter: ^2.0.2
+  universal_io: ^2.2.0
 
 dev_dependencies:
   flutter_test:
