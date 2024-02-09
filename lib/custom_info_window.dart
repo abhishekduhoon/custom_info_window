@@ -56,9 +56,9 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
   double _topMargin = 0;
   Widget? _child;
   LatLng? _latLng;
-  double _offset = 50;
-  double _height = 50;
-  double _width = 100;
+  double? _offset;
+  double? _height;
+  double? _width;
 
   @override
   void initState() {
@@ -73,6 +73,9 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
   void _updateInfoWindow() async {
     if (_latLng == null ||
         _child == null ||
+        _offset == null ||
+        _height == null ||
+        _width == null ||
         widget.controller.googleMapController == null) {
       return;
     }
@@ -82,15 +85,15 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     double devicePixelRatio =
         Theme.of(context).platform == TargetPlatform.android ? MediaQuery.of(context).devicePixelRatio : 1.0;
     double left =
-        (screenCoordinate.x.toDouble() / devicePixelRatio) - (_width / 2);
+        (screenCoordinate.x.toDouble() / devicePixelRatio) - (_width! / 2);
     double top = (screenCoordinate.y.toDouble() / devicePixelRatio) -
-        (_offset + _height);
+        (_offset! + _height!);
     setState(() {
       _showNow = true;
       _leftMargin = left;
       _topMargin = top;
     });
-    widget.onChange.call(top, left, _width, _height);
+    widget.onChange.call(top, left, _width!, _height!);
   }
 
   /// Assign the [Widget] and [Marker]'s [LatLng].
