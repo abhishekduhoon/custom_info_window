@@ -32,6 +32,9 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
 
   final LatLng _latLng = LatLng(28.7041, 77.1025);
   final double _zoom = 15.0;
+  final double offset = 50;
+  final double height = 75;
+  final double width = 150;
 
   @override
   void dispose() {
@@ -48,53 +51,57 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
         markerId: MarkerId("marker_id"),
         position: _latLng,
         onTap: () {
-          _customInfoWindowController.addInfoWindow(
-            Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.account_circle,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Text(
-                            "I am here",
-                            style:
-                                Theme.of(context).textTheme.headline6.copyWith(
-                                      color: Colors.white,
-                                    ),
-                          )
-                        ],
+          _customInfoWindowController.addInfoWindow!(
+            SizedBox(
+              height: height,
+              width: width,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(4),
                       ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.account_circle,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Text(
+                              "I am here",
+                              style:
+                                  Theme.of(context).textTheme.titleLarge?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                            )
+                          ],
+                        ),
+                      ),
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
-                    width: double.infinity,
-                    height: double.infinity,
                   ),
-                ),
-                Triangle.isosceles(
-                  edge: Edge.BOTTOM,
-                  child: Container(
-                    color: Colors.blue,
-                    width: 20.0,
-                    height: 10.0,
+                  Triangle.isosceles(
+                    edge: Edge.BOTTOM,
+                    child: Container(
+                      color: Colors.blue,
+                      width: 20.0,
+                      height: 10.0,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            _latLng,
+            _latLng, offset, height, width,
           );
         },
       ),
@@ -108,10 +115,10 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
         children: <Widget>[
           GoogleMap(
             onTap: (position) {
-              _customInfoWindowController.hideInfoWindow();
+              _customInfoWindowController.hideInfoWindow!();
             },
             onCameraMove: (position) {
-              _customInfoWindowController.onCameraMove();
+              _customInfoWindowController.onCameraMove!();
             },
             onMapCreated: (GoogleMapController controller) async {
               _customInfoWindowController.googleMapController = controller;
@@ -123,10 +130,8 @@ class _CustomInfoWindowExampleState extends State<CustomInfoWindowExample> {
             ),
           ),
           CustomInfoWindow(
+            (top, left, width, height) => null,
             controller: _customInfoWindowController,
-            height: 75,
-            width: 150,
-            offset: 50,
           ),
         ],
       ),

@@ -1,7 +1,6 @@
 /// A widget based custom info window for google_maps_flutter package.
 library custom_info_window;
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,13 +8,19 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 /// Controller to add, update and control the custom info window.
 class CustomInfoWindowController {
   /// Add custom [Widget] and [Marker]'s [LatLng] to [CustomInfoWindow] and make it visible.
-  Function(Widget, LatLng)? addInfoWindow;
+  /// Offset to maintain space between [Marker] and [CustomInfoWindow].
+  /// Height of [CustomInfoWindow].
+  /// Width of [CustomInfoWindow].
+  Function(Widget, LatLng, double, double, double)? addInfoWindow;
 
   /// Notifies [CustomInfoWindow] to redraw as per change in position.
   VoidCallback? onCameraMove;
 
   /// Hides [CustomInfoWindow].
   VoidCallback? hideInfoWindow;
+
+  /// Shows [CustomInfoWindow].
+  VoidCallback? showInfoWindow;
 
   /// Holds [GoogleMapController] for calculating [CustomInfoWindow] position.
   GoogleMapController? googleMapController;
@@ -24,6 +29,7 @@ class CustomInfoWindowController {
     addInfoWindow = null;
     onCameraMove = null;
     hideInfoWindow = null;
+    showInfoWindow = null;
     googleMapController = null;
   }
 }
@@ -33,27 +39,12 @@ class CustomInfoWindow extends StatefulWidget {
   /// A [CustomInfoWindowController] to manipulate [CustomInfoWindow] state.
   final CustomInfoWindowController controller;
 
-  /// Offset to maintain space between [Marker] and [CustomInfoWindow].
-  final double offset;
+  final Function(double top, double left, double width, double height) onChange;
 
-  /// Height of [CustomInfoWindow].
-  final double height;
-
-  /// Width of [CustomInfoWindow].
-  final double width;
-
-  const CustomInfoWindow({
+  const CustomInfoWindow(
+    this.onChange, {
     required this.controller,
-    this.offset = 50,
-    this.height = 50,
-    this.width = 100,
-  })  : assert(controller != null),
-        assert(offset != null),
-        assert(offset >= 0),
-        assert(height != null),
-        assert(height >= 0),
-        assert(width != null),
-        assert(width >= 0);
+  });
 
   @override
   _CustomInfoWindowState createState() => _CustomInfoWindowState();
@@ -65,6 +56,9 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
   double _topMargin = 0;
   Widget? _child;
   LatLng? _latLng;
+  double? _offset;
+  double? _height;
+  double? _width;
 
   @override
   void initState() {
@@ -72,12 +66,16 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     widget.controller.addInfoWindow = _addInfoWindow;
     widget.controller.onCameraMove = _onCameraMove;
     widget.controller.hideInfoWindow = _hideInfoWindow;
+    widget.controller.showInfoWindow = _showInfoWindow;
   }
 
   /// Calculate the position on [CustomInfoWindow] and redraw on screen.
   void _updateInfoWindow() async {
     if (_latLng == null ||
         _child == null ||
+        _offset == null ||
+        _height == null ||
+        _width == null ||
         widget.controller.googleMapController == null) {
       return;
     }
@@ -85,24 +83,26 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
         .controller.googleMapController!
         .getScreenCoordinate(_latLng!);
     double devicePixelRatio =
-        Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1.0;
+        Theme.of(context).platform == TargetPlatform.android ? MediaQuery.of(context).devicePixelRatio : 1.0;
     double left =
-        (screenCoordinate.x.toDouble() / devicePixelRatio) - (widget.width / 2);
+        (screenCoordinate.x.toDouble() / devicePixelRatio) - (_width! / 2);
     double top = (screenCoordinate.y.toDouble() / devicePixelRatio) -
-        (widget.offset + widget.height);
+        (_offset! + _height!);
     setState(() {
       _showNow = true;
       _leftMargin = left;
       _topMargin = top;
     });
+    widget.onChange.call(top, left, _width!, _height!);
   }
 
   /// Assign the [Widget] and [Marker]'s [LatLng].
-  void _addInfoWindow(Widget child, LatLng latLng) {
-    assert(child != null);
-    assert(latLng != null);
+  void _addInfoWindow(Widget child, LatLng latLng, double offset, double height, double width) {
     _child = child;
     _latLng = latLng;
+    _offset = offset;
+    _height = height;
+    _width = width;
     _updateInfoWindow();
   }
 
@@ -119,6 +119,11 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
     });
   }
 
+  /// Enables [CustomInfoWindow] visibility.
+  void _showInfoWindow() {
+    _updateInfoWindow();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -133,8 +138,8 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
             : true,
         child: Container(
           child: _child,
-          height: widget.height,
-          width: widget.width,
+          height: _height,
+          width: _width,
         ),
       ),
     );
